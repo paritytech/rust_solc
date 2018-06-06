@@ -2,6 +2,7 @@
 extern crate error_chain;
 
 use std::process::Command;
+use std::path::Path;
 
 pub mod error;
 use error::ResultExt;
@@ -19,6 +20,26 @@ pub fn is_solc_available() -> bool {
 /// `solc` is the C++ implementation of the solidity compiler.
 pub fn solc_version() -> error::Result<String> {
     version("solcjs")
+}
+
+pub fn solc_compile<A: AsRef<Path>>(input_file_path: A) -> error::Result<()> {
+    let mut command = Command::new("solc");
+    command
+        .arg("--bin")
+        .arg("--abi")
+        .arg("--overwrite")
+        .arg("--optimize")
+        .arg("--output-dir").arg(".");
+    // if let Some(output_dir_path) = maybe_output_dir_path {
+    //     command
+    //         .arg("--output-dir")
+    //         .arg(output_dir_path);
+    // }
+    command.arg(input_file_path.as_ref());
+
+    command.output().chain_err(|| "failed to run `solc`")?;
+
+    Ok(())
 }
 
 /// returns whether `solcjs` is in path.
