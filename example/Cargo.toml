@@ -5,3 +5,9 @@ authors = ["Maximilian Krüger <kruemaxi@googlemail.com>"]
 
 [dependencies]
 solc = { path = ".." }
+ethabi = { git = "https://github.com/paritytech/ethabi" }
+ethabi-derive = { git = "https://github.com/paritytech/ethabi" }
+ethabi-contract = { git = "https://github.com/paritytech/ethabi" }
+
+[build-dependencies]
+solc = { path = ".." }
