@@ -37,13 +37,13 @@ pub fn solcjs_version() -> error::Result<String> {
 }
 
 fn version(command_name: &str) -> error::Result<String> {
-    let output = Command::new(command_name)
-        .args(&["--version"])
+    let command_output = Command::new(command_name)
+        .arg("--version")
         .output()
         .chain_err(|| format!("failed to run `{} --version`", command_name))?;
-    let output_string = String::from_utf8(output.stdout)
+    let stdout = String::from_utf8(command_output.stdout)
         .chain_err(|| format!("output from `{} --version` is not utf8", command_name))?;
-    let version = output_string
+    let version = stdout
         .lines()
         .last()
         .chain_err(|| format!("output from `{} --version` is empty", command_name))?
