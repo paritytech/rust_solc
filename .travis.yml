@@ -1,0 +1,34 @@
+branches:
+  only:
+  - master
+
+sudo: required
+dist: trusty
+language: rust
+cache: cargo
+
+matrix:
+  include:
+    - rust: stable
+      install:
+        - sudo apt-get --yes install snapd
+        - sudo snap install solc --stable
+        - snap list
+      before_script:
+        - export PATH=/snap/bin:${PATH}
+        - rustup component add rustfmt-preview
+      script:
+        # using --write-mode=diff instructs rustfmt to exit with an error code if the input is not formatted correctly
+        - cargo fmt --all -- --write-mode=diff
+        - cd example
+        - cargo build
+    - rust: stable
+      install:
+        - sudo apt-get --yes install snapd
+        - sudo snap install nodejs --stable
+        - snap list
+      before_script:
+        - export PATH=/snap/bin:${PATH}
+      script:
+        - cd example
+        - cargo build
