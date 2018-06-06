@@ -23,6 +23,12 @@ matrix:
         - cargo run
         - cd example
         - cargo build
+      # after success build rust documentation and push it to gh-pages branch
+      after_success: |
+        cargo doc --no-deps && \
+        sudo pip install ghp-import && \
+        ghp-import -n target/doc && \
+        git push -qf https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
     - rust: 1.12.2
       install:
         - sudo apt-get --yes install snapd
