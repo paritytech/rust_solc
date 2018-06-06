@@ -22,20 +22,19 @@ pub fn solc_version() -> error::Result<String> {
     version("solcjs")
 }
 
-pub fn solc_compile<A: AsRef<Path>>(input_file_path: A) -> error::Result<()> {
+/// shells out to `solc` to compile
+/// `input_file_path` into abi and bin files in `output_dir_path`.
+///
+/// `solc` is the C++ implementation of the solidity compiler.
+pub fn solc_compile<A: AsRef<Path>, B: AsRef<Path>>(input_file_path: A, output_dir_path: B) -> error::Result<()> {
     let mut command = Command::new("solc");
     command
         .arg("--bin")
         .arg("--abi")
         .arg("--overwrite")
         .arg("--optimize")
-        .arg("--output-dir").arg(".");
-    // if let Some(output_dir_path) = maybe_output_dir_path {
-    //     command
-    //         .arg("--output-dir")
-    //         .arg(output_dir_path);
-    // }
-    command.arg(input_file_path.as_ref());
+        .arg("--output-dir").arg(output_dir_path.as_ref())
+        .arg(input_file_path.as_ref());
 
     command.output().chain_err(|| "failed to run `solc`")?;
 
