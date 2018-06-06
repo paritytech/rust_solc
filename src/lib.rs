@@ -6,7 +6,7 @@ use std::process::Command;
 pub mod error;
 use error::ResultExt;
 
-/// returns whether `solc` is in path
+/// returns whether `solc` is in path.
 /// `solc` is the C++ implementation of the solidity compiler.
 pub fn is_solc_available() -> bool {
     solc_version().is_ok()
