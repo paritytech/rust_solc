@@ -65,6 +65,34 @@ pub fn solcjs_version() -> error::Result<String> {
     version("solcjs")
 }
 
+/// shells out to `solcjs` to compile
+/// `input_file_path` into abi and bin files in `output_dir_path`.
+///
+/// `solcjs` is the javascript implementation of the solidity compiler.
+pub fn solcjs_compile<A: AsRef<Path>, B: AsRef<Path>>(
+    input_file_path: A,
+    output_dir_path: B,
+) -> error::Result<Output> {
+    let command_output = Command::new("solcjs")
+        .arg("--bin")
+        .arg("--abi")
+        .arg("--overwrite")
+        .arg("--optimize")
+        .arg("--output-dir")
+        .arg(output_dir_path.as_ref())
+        .arg(input_file_path.as_ref())
+        .output()
+        .chain_err(|| "failed to run process `solcjs`")?;
+
+    if !command_output.status.success() {
+        return Err(
+            error::ErrorKind::ExitStatusNotSuccess("solcjs".into(), command_output.status).into(),
+        );
+    }
+
+    Ok(command_output)
+}
+
 fn version(command_name: &str) -> error::Result<String> {
     let command_output = Command::new(command_name)
         .arg("--version")
