@@ -16,18 +16,7 @@ pub fn is_solc_available() -> bool {
 /// more specifically the last line which is the version string.
 /// `solc` is the C++ implementation of the solidity compiler.
 pub fn solc_version() -> error::Result<String> {
-    let output = Command::new("solc")
-        .args(&["--version"])
-        .output()
-        .chain_err(|| "failed to run `solc --version`")?;
-    let output_string =
-        String::from_utf8(output.stdout).chain_err(|| "output from `solc --version` is not utf8")?;
-    let version = output_string
-        .lines()
-        .last()
-        .chain_err(|| "output from `solc --version` is empty")?
-        .to_owned();
-    Ok(version)
+    version("solcjs")
 }
 
 /// returns whether `solcjs` is in path.
@@ -40,16 +29,20 @@ pub fn is_solcjs_available() -> bool {
 /// more specifically the last line which is the version string.
 /// `solcjs` is the javascript implementation of the solidity compiler.
 pub fn solcjs_version() -> error::Result<String> {
-    let output = Command::new("solcjs")
+    version("solcjs")
+}
+
+fn version(command_name: &str) -> error::Result<String> {
+    let output = Command::new(command_name)
         .args(&["--version"])
         .output()
-        .chain_err(|| "failed to run `solcjs --version`")?;
-    let output_string =
-        String::from_utf8(output.stdout).chain_err(|| "output from `solcjs --version` is not utf8")?;
+        .chain_err(|| format!("failed to run `{} --version`", command_name))?;
+    let output_string = String::from_utf8(output.stdout)
+        .chain_err(|| format!("output from `{} --version` is not utf8", command_name))?;
     let version = output_string
         .lines()
         .last()
-        .chain_err(|| "output from `solcjs --version` is empty")?
+        .chain_err(|| format!("output from `{} --version` is empty", command_name))?
         .to_owned();
     Ok(version)
 }
