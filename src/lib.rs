@@ -1,8 +1,8 @@
 #[macro_use]
 extern crate error_chain;
 
-use std::process::{Command, Output};
 use std::path::Path;
+use std::process::{Command, Output};
 
 pub mod error;
 use error::ResultExt;
@@ -26,20 +26,26 @@ pub fn solc_version() -> error::Result<String> {
 /// `input_file_path` into abi and bin files in `output_dir_path`.
 ///
 /// `solc` is the C++ implementation of the solidity compiler.
-pub fn solc_compile<A: AsRef<Path>, B: AsRef<Path>>(input_file_path: A, output_dir_path: B) -> error::Result<Output> {
+pub fn solc_compile<A: AsRef<Path>, B: AsRef<Path>>(
+    input_file_path: A,
+    output_dir_path: B,
+) -> error::Result<Output> {
     let command_output = Command::new("solc")
         .arg("--bin")
         .arg("--abi")
         .arg("--overwrite")
         .arg("--optimize")
-        .arg("--output-dir").arg(output_dir_path.as_ref())
+        .arg("--output-dir")
+        .arg(output_dir_path.as_ref())
         .arg(input_file_path.as_ref())
         .output()
         .chain_err(|| "failed to run process `solc`")?;
 
-     if !command_output.status.success() {
-         return Err(error::ErrorKind::ExitStatusNotSuccess("solc".into(), command_output.status).into());
-     }
+    if !command_output.status.success() {
+        return Err(
+            error::ErrorKind::ExitStatusNotSuccess("solc".into(), command_output.status).into(),
+        );
+    }
 
     Ok(command_output)
 }
@@ -64,9 +70,12 @@ fn version(command_name: &str) -> error::Result<String> {
         .arg("--version")
         .output()
         .chain_err(|| format!("failed to run `{} --version`", command_name))?;
-     if !command_output.status.success() {
-         return Err(error::ErrorKind::ExitStatusNotSuccess(command_name.to_owned(), command_output.status).into());
-     }
+    if !command_output.status.success() {
+        return Err(error::ErrorKind::ExitStatusNotSuccess(
+            command_name.to_owned(),
+            command_output.status,
+        ).into());
+    }
     let stdout = String::from_utf8(command_output.stdout)
         .chain_err(|| format!("output from `{} --version` is not utf8", command_name))?;
     let version = stdout
