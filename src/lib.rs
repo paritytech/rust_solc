@@ -16,7 +16,7 @@ pub fn compile<A: AsRef<Path>, B: AsRef<Path>>(
     if is_solc_available() {
         solc_compile(input_file_path, output_dir_path)
     } else if is_solcjs_available() {
-        solc_compile(input_file_path, output_dir_path)
+        solcjs_compile(input_file_path, output_dir_path)
     } else {
         Err(error::ErrorKind::NoSolidityCompilerFound.into())
     }
