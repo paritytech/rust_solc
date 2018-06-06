@@ -20,6 +20,7 @@ matrix:
       script:
         # using --write-mode=diff instructs rustfmt to exit with an error code if the input is not formatted correctly
         - cargo fmt --all -- --write-mode=diff
+        - cargo run
         - cd example
         - cargo build
     - rust: stable
@@ -31,5 +32,6 @@ matrix:
       before_script:
         - export PATH=/snap/bin:${PATH}
       script:
+        - cargo run
         - cd example
         - cargo build
