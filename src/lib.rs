@@ -34,7 +34,7 @@ pub fn is_solc_available() -> bool {
 /// more specifically returns the last output line which is the version string.
 /// `solc` is the C++ implementation of the solidity compiler.
 pub fn solc_version() -> error::Result<String> {
-    version("solcjs")
+    version("solc")
 }
 
 /// shells out to `solc` to compile
