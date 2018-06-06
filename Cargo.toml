@@ -5,3 +5,8 @@ authors = ["Maximilian Krüger <kruemaxi@googlemail.com>"]
 
 [dependencies]
 error-chain = "0.11.0"
+
+[workspace]
+members = [
+    "example",
+]
