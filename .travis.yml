@@ -9,7 +9,7 @@ cache: cargo
 
 matrix:
   include:
-    - rust: 1.12.1
+    - rust: stable-2018-06-06
       install:
         - sudo apt-get --yes install snapd
         - sudo snap install solc --stable
@@ -29,7 +29,7 @@ matrix:
         sudo pip install ghp-import && \
         ghp-import -n target/doc && \
         git push -qf https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
-    - rust: 1.12.1
+    - rust: stable-2018-06-06
       install:
         - sudo apt-get --yes install snapd
         - sudo snap install node --classic --channel=9/stable
