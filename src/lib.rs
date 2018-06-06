@@ -64,6 +64,9 @@ fn version(command_name: &str) -> error::Result<String> {
         .arg("--version")
         .output()
         .chain_err(|| format!("failed to run `{} --version`", command_name))?;
+     if !command_output.status.success() {
+         return Err(error::ErrorKind::ExitStatusNotSuccess(command_name.to_owned(), command_output.status).into());
+     }
     let stdout = String::from_utf8(command_output.stdout)
         .chain_err(|| format!("output from `{} --version` is not utf8", command_name))?;
     let version = stdout
