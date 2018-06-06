@@ -5,5 +5,5 @@ fn main() {
     println!("cargo:rerun-if-changed=./contracts/test.sol");
 
     // println!("cargo:rustc-env=SOLC_VERSION={}", solc::solc_version);
-    solc::solc_compile("./contracts/test.sol", "./contracts").unwrap();
+    solc::compile("./contracts/test.sol", "./contracts").unwrap();
 }
