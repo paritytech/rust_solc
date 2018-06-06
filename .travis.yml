@@ -25,7 +25,7 @@ matrix:
     - rust: stable
       install:
         - sudo apt-get --yes install snapd
-        - sudo snap install node --channel=9/stable
+        - sudo snap install node --classic --channel=9/stable
         - snap list
         - npm install -g solc
       before_script:
