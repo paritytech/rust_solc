@@ -7,6 +7,21 @@ use std::process::{Command, Output};
 pub mod error;
 use error::ResultExt;
 
+/// shells out to either `solc` or `solcjs` (whichever is available)
+/// to compile `input_file_path` into abi and bin files in `output_dir_path`.
+pub fn compile<A: AsRef<Path>, B: AsRef<Path>>(
+    input_file_path: A,
+    output_dir_path: B,
+) -> error::Result<Output> {
+    if is_solc_available() {
+        solc_compile(input_file_path, output_dir_path)
+    } else if is_solcjs_available() {
+        solc_compile(input_file_path, output_dir_path)
+    } else {
+        Err(error::ErrorKind::NoSolidityCompilerFound.into())
+    }
+}
+
 /// returns whether `solc` is in path.
 ///
 /// `solc` is the C++ implementation of the solidity compiler.
