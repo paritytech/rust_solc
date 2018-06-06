@@ -1,0 +1,7 @@
+[package]
+name = "solc"
+version = "0.1.0"
+authors = ["Maximilian Krüger <kruemaxi@googlemail.com>"]
+
+[dependencies]
+error-chain = "0.11.0"
