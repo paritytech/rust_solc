@@ -5,7 +5,7 @@
 [travis-image]: https://travis-ci.org/snd/rust_solc.svg?branch=master
 [travis-url]: https://travis-ci.org/snd/rust_solc
 
-**easily to compile solidity files from rust**
+**easily compile solidity files from rust**
 
 ```rust
 extern crate solc;
