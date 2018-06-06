@@ -25,7 +25,7 @@ matrix:
     - rust: stable
       install:
         - sudo apt-get --yes install snapd
-        - sudo snap install nodejs --stable
+        - sudo snap install node --stable
         - snap list
       before_script:
         - export PATH=/snap/bin:${PATH}
