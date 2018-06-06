@@ -7,12 +7,14 @@ pub mod error;
 use error::ResultExt;
 
 /// returns whether `solc` is in path.
+///
 /// `solc` is the C++ implementation of the solidity compiler.
 pub fn is_solc_available() -> bool {
     solc_version().is_ok()
 }
 
 /// returns the output of `solc --version`.
+///
 /// more specifically the last line which is the version string.
 /// `solc` is the C++ implementation of the solidity compiler.
 pub fn solc_version() -> error::Result<String> {
@@ -20,12 +22,14 @@ pub fn solc_version() -> error::Result<String> {
 }
 
 /// returns whether `solcjs` is in path.
+///
 /// `solcjs` is the javascript implementation of the solidity compiler.
 pub fn is_solcjs_available() -> bool {
     solcjs_version().is_ok()
 }
 
 /// returns the output of `solcjs --version`.
+///
 /// more specifically the last line which is the version string.
 /// `solcjs` is the javascript implementation of the solidity compiler.
 pub fn solcjs_version() -> error::Result<String> {
