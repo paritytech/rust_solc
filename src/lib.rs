@@ -30,7 +30,20 @@ pub fn solc_version() -> error::Result<String> {
     Ok(version)
 }
 
-/// returns whether `solcjs` is in path
-pub fn is_solcjs_available() {}
-
-pub fn compile_with_solc() {}
+/// returns the output of `solcjs --version`.
+/// more specifically the last line which is the version string.
+/// `solcjs` is the javascript implementation of the solidity compiler.
+pub fn solcjs_version() -> error::Result<String> {
+    let output = Command::new("solcjs")
+        .args(&["--version"])
+        .output()
+        .chain_err(|| "failed to run `solcjs --version`")?;
+    let output_string =
+        String::from_utf8(output.stdout).chain_err(|| "output from `solcjs --version` is not utf8")?;
+    let version = output_string
+        .lines()
+        .last()
+        .chain_err(|| "output from `solcjs --version` is empty")?
+        .to_owned();
+    Ok(version)
+}
