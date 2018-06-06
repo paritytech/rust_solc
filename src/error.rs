@@ -15,5 +15,10 @@ error_chain! {
             description("command exit status is not success (0)"),
             display("command (`{}`) is not success (0) but `{}`", command, exit_status)
         }
+        NoSolidityCompilerFound {
+            description("neither `solc` nor `solcjs` are in path"),
+            // TODO [snd] please install either via
+            display("neither `solc` nor `solcjs` are in path")
+        }
     }
 }
