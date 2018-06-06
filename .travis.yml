@@ -9,7 +9,7 @@ cache: cargo
 
 matrix:
   include:
-    - rust: stable
+    - rust: 1.12.2
       install:
         - sudo apt-get --yes install snapd
         - sudo snap install solc --stable
@@ -23,7 +23,7 @@ matrix:
         - cargo run
         - cd example
         - cargo build
-    - rust: stable
+    - rust: 1.12.2
       install:
         - sudo apt-get --yes install snapd
         - sudo snap install node --classic --channel=9/stable
