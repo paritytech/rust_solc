@@ -34,8 +34,9 @@ fn main() {
         }
     });
 
-    let output_json = solc::common_compile("solc", &input_json.to_string()).unwrap();
+    let output_string = solc::common_compile("solc", &input_json.to_string()).unwrap();
+    let output_json: serde_json::Value = serde_json::from_str(&output_string).unwrap();
 
     println!("output_json =");
-    println!("{}", output_json);
+    println!("{:#?}", output_json);
 }
