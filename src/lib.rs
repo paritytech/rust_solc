@@ -2,7 +2,8 @@
 extern crate error_chain;
 
 use std::path::{Path, PathBuf};
-use std::process::{Command, Output};
+use std::process::{Command, Output, Stdio};
+use std::io::Write;
 
 pub mod error;
 use error::ResultExt;
@@ -151,4 +152,40 @@ fn common_version(command_name: &str) -> error::Result<String> {
         .chain_err(|| format!("output from `{} --version` is empty", command_name))?
         .to_owned();
     Ok(version)
+}
+
+pub fn common_compile(
+    command_name: &str,
+    input_json: &str,
+) -> error::Result<String> {
+    let full_command = format!("{} --standard-json", command_name);
+
+    let mut process = Command::new(command_name)
+        .arg("--standard-json")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .spawn()
+        .chain_err(|| format!("failed to spawn process `{}`", &full_command))?;
+
+    {
+        let stdin = process.stdin.as_mut()
+            .chain_err(|| format!("failed to open stdin for process `{}`", &full_command))?;
+
+        stdin.write_all(input_json.as_bytes())
+            .chain_err(|| format!("failed to write input json to stdin for process `{}`", &full_command))?;
+    }
+
+    let output = process.wait_with_output()
+        .chain_err(|| format!("failed to read output json from stdout for process `{}`", &full_command))?;
+
+    if !output.status.success() {
+        return Err(
+            error::ErrorKind::ExitStatusNotSuccess(full_command.clone(), output.status).into(),
+        );
+    }
+
+    let output_json = String::from_utf8(output.stdout)
+        .chain_err(|| format!("output json from process `{}` is not utf8 encoded", full_command))?;
+
+    Ok(output_json)
 }
