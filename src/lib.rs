@@ -42,7 +42,7 @@ pub fn is_solc_available() -> bool {
 /// more specifically returns the last output line which is the version string.
 /// `solc` is the C++ implementation of the solidity compiler.
 pub fn solc_version() -> error::Result<String> {
-    version("solc")
+    common_version("solc")
 }
 
 /// shells out to `solc` to compile
@@ -85,7 +85,7 @@ pub fn is_solcjs_available() -> bool {
 /// more specifically returns the last output line which is the version string.
 /// `solcjs` is the javascript implementation of the solidity compiler.
 pub fn solcjs_version() -> error::Result<String> {
-    version("solcjs")
+    common_version("solcjs")
 }
 
 /// shells out to `solcjs` to compile
@@ -131,7 +131,8 @@ pub fn solidity_file_paths<T: AsRef<Path>>(directory: T) -> std::io::Result<Vec<
     Ok(results)
 }
 
-fn version(command_name: &str) -> error::Result<String> {
+/// version code that's common for `solc` and `solcjs`
+fn common_version(command_name: &str) -> error::Result<String> {
     let command_output = Command::new(command_name)
         .arg("--version")
         .output()
