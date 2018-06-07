@@ -7,19 +7,27 @@ use std::process::{Command, Output};
 pub mod error;
 use error::ResultExt;
 
-/// shells out to either `solc` or `solcjs` (whichever is available)
-/// to compile `input_file_path` into abi and bin files in `output_dir_path`.
+/// shells out to either `solc` or `solcjs` (whichever is available in that order)
+/// to compile all solidity files in `input_dir_path`
+/// into abi and bin files in `output_dir_path`.
 pub fn compile<A: AsRef<Path>, B: AsRef<Path>>(
-    input_file_path: A,
+    input_dir_path: A,
     output_dir_path: B,
-) -> error::Result<Output> {
-    if is_solc_available() {
-        solc_compile(input_file_path, output_dir_path)
-    } else if is_solcjs_available() {
-        solcjs_compile(input_file_path, output_dir_path)
-    } else {
-        Err(error::ErrorKind::NoSolidityCompilerFound.into())
+) -> error::Result<()> {
+    let is_solc_available = is_solc_available();
+
+    if !is_solc_available && !is_solcjs_available() {
+        return Err(error::ErrorKind::NoSolidityCompilerFound.into());
     }
+
+    for input_file_path in solidity_file_paths(input_dir_path)? {
+        if is_solc_available {
+            solc_compile(input_file_path, &output_dir_path)?;
+        } else {
+            solcjs_compile(input_file_path, &output_dir_path)?;
+        }
+    }
+    Ok(())
 }
 
 /// returns whether `solc` is in path.
