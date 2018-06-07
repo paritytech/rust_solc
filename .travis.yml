@@ -29,15 +29,15 @@ matrix:
         sudo pip install ghp-import && \
         ghp-import -n target/doc && \
         git push -qf https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
-    - rust: stable-2018-05-29
-      install:
-        - sudo apt-get --yes install snapd
-        - sudo snap install node --classic --channel=9/stable
-        - snap list
-        - npm install -g solc
-      before_script:
-        - export PATH=/snap/bin:${PATH}
-      script:
-        - cargo run
-        - cd example
-        - cargo run
+    # - rust: stable-2018-05-29
+    #   install:
+    #     - sudo apt-get --yes install snapd
+    #     - sudo snap install node --classic --channel=9/stable
+    #     - snap list
+    #     - npm install -g solc
+    #   before_script:
+    #     - export PATH=/snap/bin:${PATH}
+    #   script:
+    #     - cargo run
+    #     - cd example
+    #     - cargo run
