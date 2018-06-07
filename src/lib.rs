@@ -109,7 +109,7 @@ pub fn solcjs_compile<A: AsRef<Path>, B: AsRef<Path>>(
 }
 
 /// returns all solidity files in `directory`
-pub fn solidity_files<T: AsRef<Path>>(directory: T) -> std::io::Result<Vec<PathBuf>> {
+pub fn solidity_file_paths<T: AsRef<Path>>(directory: T) -> std::io::Result<Vec<PathBuf>> {
     let mut results = Vec::new();
 
     for maybe_entry in std::fs::read_dir(directory)? {
