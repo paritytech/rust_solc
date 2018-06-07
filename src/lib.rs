@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate error_chain;
 
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
 
 pub mod error;
@@ -106,6 +106,21 @@ pub fn solcjs_compile<A: AsRef<Path>, B: AsRef<Path>>(
     }
 
     Ok(command_output)
+}
+
+/// returns all solidity files in `directory`
+pub fn solidity_files<T: AsRef<Path>>(directory: T) -> std::io::Result<Vec<PathBuf>> {
+    let mut results = Vec::new();
+
+    for maybe_entry in std::fs::read_dir(directory)? {
+        let path = maybe_entry?.path();
+        if let Some(extension) = path.extension() {
+            if extension != "sol" { continue; }
+        }
+        results.push(path);
+    }
+
+    Ok(results)
 }
 
 fn version(command_name: &str) -> error::Result<String> {
