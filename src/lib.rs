@@ -195,7 +195,7 @@ pub fn common_compile(command_name: &str, input_json: &str) -> error::Result<Str
 
     let output_json = String::from_utf8(output.stdout).chain_err(|| {
         format!(
-            "output json from process `{}` is not utf8 encoded",
+            "stdout from process `{}` must be utf8 but isn't",
             full_command
         )
     })?;
