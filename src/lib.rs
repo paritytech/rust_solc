@@ -156,7 +156,23 @@ fn common_version(command_name: &str) -> error::Result<String> {
     Ok(version)
 }
 
-pub fn common_compile(command_name: &str, input_json: &str) -> error::Result<String> {
+pub fn standard_json(input_json: &str) -> error::Result<String> {
+    let is_solc_available = is_solc_available();
+
+    if !is_solc_available && !is_solcjs_available() {
+        return Err(error::ErrorKind::NoSolidityCompilerFound.into());
+    }
+
+    let command_name = if is_solc_available {
+        "solc"
+    } else {
+        "solcjs"
+    };
+
+    common_standard_json(command_name, input_json)
+}
+
+pub fn common_standard_json(command_name: &str, input_json: &str) -> error::Result<String> {
     let full_command = format!("{} --standard-json", command_name);
 
     let mut process = Command::new(command_name)
