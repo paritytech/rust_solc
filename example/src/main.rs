@@ -24,10 +24,11 @@ fn main() {
             "outputSelection": {
                 "*": {
                     "*": [
-                        "metadata",
+                        // "metadata",
                         "abi",
-                        "evm.bytecode",
-                        "evm.gasEstimates"
+                        "evm.bytecode.object",
+                        "evm.bytecode.sourceMap",
+                        // "evm.gasEstimates"
                     ]
                 }
             }
