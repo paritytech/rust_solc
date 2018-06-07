@@ -11,10 +11,13 @@
 extern crate solc;
 
 fn main() {
+    let input_directory = "./contracts";
+    let output_directory = "./contracts";
+
     // first tries solc
     // then tries solcjs
     // returns error if no compiler available
-    solc::compile("./contracts/test.sol", "./contracts").unwrap();
+    solc::compile(&input_directory, &output_directory).unwrap();
 
     // now `./contracts` contains a `*.bin` and a `*.abi` file
     // for every contract found in `./contracts/test.sol`
