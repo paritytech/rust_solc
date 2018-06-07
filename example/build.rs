@@ -4,5 +4,5 @@ fn main() {
     // always rerun build script if contract has changed
     println!("cargo:rerun-if-changed=./contracts/test.sol");
 
-    solc::compile("./contracts", "./contracts").unwrap();
+    // solc::common_compile("./contracts", "./contracts").unwrap();
 }

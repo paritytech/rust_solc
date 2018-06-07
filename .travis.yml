@@ -22,7 +22,7 @@ matrix:
         - cargo fmt --all -- --write-mode=diff
         - cargo run
         - cd example
-        - cargo build
+        - cargo run
       # after success build rust documentation and push it to gh-pages branch
       after_success: |
         cargo doc --no-deps && \
@@ -40,4 +40,4 @@ matrix:
       script:
         - cargo run
         - cd example
-        - cargo build
+        - cargo run
