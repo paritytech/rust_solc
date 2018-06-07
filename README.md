@@ -1,5 +1,7 @@
 # rust-solc
 
+**this is a work in progress**
+
 [![Build Status][travis-image]][travis-url]
 
 [travis-image]: https://travis-ci.org/snd/rust_solc.svg?branch=master
