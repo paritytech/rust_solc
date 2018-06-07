@@ -163,11 +163,7 @@ pub fn standard_json(input_json: &str) -> error::Result<String> {
         return Err(error::ErrorKind::NoSolidityCompilerFound.into());
     }
 
-    let command_name = if is_solc_available {
-        "solc"
-    } else {
-        "solcjs"
-    };
+    let command_name = if is_solc_available { "solc" } else { "solcjs" };
 
     common_standard_json(command_name, input_json)
 }
