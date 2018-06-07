@@ -9,12 +9,9 @@
 
 **easily compile solidity files from rust**
 
-shells out to `solc` or `solcjs` (whichever is available in that order) and normalizes their differences.
-
-either `solc` (C++) or `solcjs` (JS) must be installed and in `$PATH`.
-
-[click here to see how to install `solc`](https://solidity.readthedocs.io/en/latest/installing-solidity.html#binary-packages)
-
+shells out to `solc` or `solcjs` (whichever is available in that order).  
+either `solc` (C++) or `solcjs` (JS) must be installed and in `$PATH`.  
+[click here to see how to install `solc`](https://solidity.readthedocs.io/en/latest/installing-solidity.html#binary-packages)  
 [click here to see how to install `solcjs`](https://solidity.readthedocs.io/en/latest/installing-solidity.html#npm-node-js)
 
 ```rust
