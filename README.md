@@ -1,6 +1,6 @@
 # rust-solc
 
-**this is a work in progress**
+*this is a work in progress*
 
 [![Build Status][travis-image]][travis-url]
 
