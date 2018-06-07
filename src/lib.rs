@@ -1,9 +1,9 @@
 #[macro_use]
 extern crate error_chain;
 
+use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output, Stdio};
-use std::io::Write;
 
 pub mod error;
 use error::ResultExt;
@@ -124,7 +124,9 @@ pub fn solidity_file_paths<T: AsRef<Path>>(directory: T) -> std::io::Result<Vec<
     for maybe_entry in std::fs::read_dir(directory)? {
         let path = maybe_entry?.path();
         if let Some(extension) = path.extension() {
-            if extension != "sol" { continue; }
+            if extension != "sol" {
+                continue;
+            }
         }
         results.push(path);
     }
@@ -154,10 +156,7 @@ fn common_version(command_name: &str) -> error::Result<String> {
     Ok(version)
 }
 
-pub fn common_compile(
-    command_name: &str,
-    input_json: &str,
-) -> error::Result<String> {
+pub fn common_compile(command_name: &str, input_json: &str) -> error::Result<String> {
     let full_command = format!("{} --standard-json", command_name);
 
     let mut process = Command::new(command_name)
@@ -168,15 +167,25 @@ pub fn common_compile(
         .chain_err(|| format!("failed to spawn process `{}`", &full_command))?;
 
     {
-        let stdin = process.stdin.as_mut()
+        let stdin = process
+            .stdin
+            .as_mut()
             .chain_err(|| format!("failed to open stdin for process `{}`", &full_command))?;
 
-        stdin.write_all(input_json.as_bytes())
-            .chain_err(|| format!("failed to write input json to stdin for process `{}`", &full_command))?;
+        stdin.write_all(input_json.as_bytes()).chain_err(|| {
+            format!(
+                "failed to write input json to stdin for process `{}`",
+                &full_command
+            )
+        })?;
     }
 
-    let output = process.wait_with_output()
-        .chain_err(|| format!("failed to read output json from stdout for process `{}`", &full_command))?;
+    let output = process.wait_with_output().chain_err(|| {
+        format!(
+            "failed to read output json from stdout for process `{}`",
+            &full_command
+        )
+    })?;
 
     if !output.status.success() {
         return Err(
@@ -184,8 +193,12 @@ pub fn common_compile(
         );
     }
 
-    let output_json = String::from_utf8(output.stdout)
-        .chain_err(|| format!("output json from process `{}` is not utf8 encoded", full_command))?;
+    let output_json = String::from_utf8(output.stdout).chain_err(|| {
+        format!(
+            "output json from process `{}` is not utf8 encoded",
+            full_command
+        )
+    })?;
 
     Ok(output_json)
 }
