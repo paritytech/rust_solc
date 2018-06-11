@@ -1,9 +1,15 @@
 #[macro_use]
 extern crate error_chain;
 
+#[macro_use]
+extern crate lazy_static;
+
 use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output, Stdio};
+
+extern crate regex;
+use regex::Regex;
 
 pub mod error;
 use error::ResultExt;
@@ -156,6 +162,25 @@ pub fn solidity_file_paths<T: AsRef<Path>>(directory: T) -> std::io::Result<Vec<
     Ok(results)
 }
 
+pub fn input_file_path_to_solcjs_output_name_prefix<A: AsRef<Path>>(
+    input_file_path: A,
+) -> error::Result<String> {
+    lazy_static! {
+        static ref RE: Regex = Regex::new(r"[:./]").unwrap();
+    }
+
+    Ok(format!(
+        "{}_",
+        RE.replace_all(
+            input_file_path.as_ref().to_str().ok_or(format!(
+                "input file path `{:?}` must be utf8 but isn't",
+                input_file_path.as_ref()
+            ))?,
+            "_"
+        )
+    ))
+}
+
 /// `solcjs` prefixes output files (one per contract) with the input filename while `solc` does not.
 /// rename files so output files can be found in identical places regardless
 /// of whether `solcjs` or `solc` is used
@@ -163,20 +188,7 @@ pub fn rename_solcjs_outputs<A: AsRef<Path>, B: AsRef<Path>>(
     input_file_path: A,
     output_dir_path: B,
 ) -> error::Result<()> {
-    let input_file_stem = input_file_path
-        .as_ref()
-        .file_stem()
-        .ok_or(format!(
-            "input file path `{:?}` must have a file stem",
-            input_file_path.as_ref()
-        ))?
-        .to_str()
-        .ok_or(format!(
-            "input file path `{:?}` must be utf8 but isn't",
-            input_file_path.as_ref()
-        ))?;
-
-    let prefix = format!("{}_sol_", input_file_stem);
+    let prefix = input_file_path_to_solcjs_output_name_prefix(&input_file_path)?;
 
     for maybe_entry in std::fs::read_dir(&output_dir_path)? {
         let src_path = maybe_entry?.path();
