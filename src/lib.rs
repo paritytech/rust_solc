@@ -166,21 +166,34 @@ pub fn rename_solcjs_outputs<A: AsRef<Path>, B: AsRef<Path>>(
     let input_file_stem = input_file_path
         .as_ref()
         .file_stem()
-        .ok_or(format!("input file path `{:?}` must have a file stem", input_file_path.as_ref()))?
+        .ok_or(format!(
+            "input file path `{:?}` must have a file stem",
+            input_file_path.as_ref()
+        ))?
         .to_str()
-        .ok_or(format!("input file path `{:?}` must be utf8 but isn't", input_file_path.as_ref()))?;
+        .ok_or(format!(
+            "input file path `{:?}` must be utf8 but isn't",
+            input_file_path.as_ref()
+        ))?;
 
     let prefix = format!("{}_sol_", input_file_stem);
 
     for maybe_entry in std::fs::read_dir(&output_dir_path)? {
         let src_path = maybe_entry?.path();
         if let Some(file_name) = src_path.file_name().map(|x| x.to_os_string()) {
-            let file_name = file_name.to_str()
-                .ok_or(format!("file name `{:?}` in dir `{:?}` must be utf8 but isn't", file_name, output_dir_path.as_ref()))?;
-            if !file_name.starts_with(&prefix) { continue; }
+            let file_name = file_name.to_str().ok_or(format!(
+                "file name `{:?}` in dir `{:?}` must be utf8 but isn't",
+                file_name,
+                output_dir_path.as_ref()
+            ))?;
+            if !file_name.starts_with(&prefix) {
+                continue;
+            }
 
             if let Some(extension) = src_path.extension() {
-                if extension != "abi" && extension != "bin" { continue; }
+                if extension != "abi" && extension != "bin" {
+                    continue;
+                }
             }
 
             // dst = src path with `prefix` stripped from front of file name
