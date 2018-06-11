@@ -28,9 +28,19 @@ fn main() {
                         "abi",
                         "evm.bytecode.object",
                         "evm.bytecode.sourceMap",
-                        // "evm.gasEstimates"
+                        "evm.gasEstimates"
                     ]
-                }
+                },
+                // "*": {
+                //     "": ["ast"],
+                // }
+                // "*": {
+                //     "*": {
+                //         "*": [
+                //             "evm.bytecode.sourceMap",
+                //         ]
+                //     }
+                // }
             }
         }
     });
