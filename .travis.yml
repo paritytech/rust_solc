@@ -20,24 +20,22 @@ matrix:
       script:
         # using --write-mode=diff instructs rustfmt to exit with an error code if the input is not formatted correctly
         - cargo fmt --all -- --write-mode=diff
-        - cargo run
         - cd example
-        - cargo run
+        - cargo build
       # after success build rust documentation and push it to gh-pages branch
       after_success: |
         cargo doc --no-deps && \
         sudo pip install ghp-import && \
         ghp-import -n target/doc && \
         git push -qf https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
-    # - rust: stable-2018-05-29
-    #   install:
-    #     - sudo apt-get --yes install snapd
-    #     - sudo snap install node --classic --channel=9/stable
-    #     - snap list
-    #     - npm install -g solc
-    #   before_script:
-    #     - export PATH=/snap/bin:${PATH}
-    #   script:
-    #     - cargo run
-    #     - cd example
-    #     - cargo run
+    - rust: stable-2018-05-29
+      install:
+        - sudo apt-get --yes install snapd
+        - sudo snap install node --classic --channel=9/stable
+        - snap list
+        - npm install -g solc
+      before_script:
+        - export PATH=/snap/bin:${PATH}
+      script:
+        - cd example
+        - cargo build
