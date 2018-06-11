@@ -63,7 +63,7 @@ fn common_version(command_name: &str) -> error::Result<String> {
 /// shells out to either `solc` or `solcjs` (whichever is available in that order)
 /// to compile all solidity files in `input_dir_path`
 /// into abi and bin files in `output_dir_path`.
-pub fn compile<A: AsRef<Path>, B: AsRef<Path>>(
+pub fn compile_dir<A: AsRef<Path>, B: AsRef<Path>>(
     input_dir_path: A,
     output_dir_path: B,
 ) -> error::Result<()> {
