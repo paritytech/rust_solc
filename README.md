@@ -24,7 +24,7 @@ fn main() {
     // first tries solc
     // then tries solcjs
     // returns error if no compiler available
-    solc::compile(&input_directory, &output_directory).unwrap();
+    solc::compile_dir(&input_directory, &output_directory).unwrap();
 
     // now `./contracts` contains a `*.bin` and a `*.abi` file
     // for every contract found in `*.sol` file in `./contracts`
