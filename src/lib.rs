@@ -145,12 +145,11 @@ pub fn solidity_file_paths<T: AsRef<Path>>(directory: T) -> std::io::Result<Vec<
 
     for maybe_entry in std::fs::read_dir(directory)? {
         let path = maybe_entry?.path();
-        if let Some(extension) = path.extension() {
-            if extension != "sol" {
-                continue;
+        if let Some(extension) = path.extension().map(|x| x.to_os_string()) {
+            if extension.as_os_str() == "sol" {
+                results.push(path);
             }
         }
-        results.push(path);
     }
 
     Ok(results)
