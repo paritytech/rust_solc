@@ -2,6 +2,7 @@ branches:
   only:
   - master
 
+# need sudo and trusty to use `snap`
 sudo: required
 dist: trusty
 language: rust
@@ -9,6 +10,7 @@ cache: cargo
 
 matrix:
   include:
+    # `solc` test (`solcjs` test is the next item in this list)
     - rust: stable-2018-05-29
       install:
         - sudo apt-get --yes install snapd
@@ -28,6 +30,7 @@ matrix:
         sudo pip install ghp-import && \
         ghp-import -n target/doc && \
         git push -qf https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
+    # `solcjs` test
     - rust: stable-2018-05-29
       install:
         - sudo apt-get --yes install snapd
