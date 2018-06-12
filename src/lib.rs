@@ -184,6 +184,9 @@ pub fn input_file_path_to_solcjs_output_name_prefix<A: AsRef<Path>>(
 /// `solcjs` prefixes output files (one per contract) with the input filename while `solc` does not.
 /// rename files so output files can be found in identical places regardless
 /// of whether `solcjs` or `solc` is used
+///
+/// effectively undoes the following line in `solcjs`
+/// https://github.com/ethereum/solc-js/blob/43e8fe080686fb9627ee9ff93959e3aa61496d22/solcjs#L117
 pub fn rename_solcjs_outputs<A: AsRef<Path>, B: AsRef<Path>>(
     input_file_path: A,
     output_dir_path: B,
