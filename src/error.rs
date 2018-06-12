@@ -17,8 +17,7 @@ error_chain! {
         }
         NoSolidityCompilerFound {
             description("neither `solc` nor `solcjs` are in path"),
-            // TODO [snd] please install either via
-            display("neither `solc` nor `solcjs` are in path")
+            display("neither `solc` nor `solcjs` are in path. please install either `solc` or `solcjs` via https://solidity.readthedocs.io/en/latest/installing-solidity.html")
         }
     }
 }
