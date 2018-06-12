@@ -1,6 +1,6 @@
 # rust-solc
 
-*this is a work in progress*
+*this is a work in progress. it works as described in the example. the API might change frequently in the future*
 
 [![Build Status][travis-image]][travis-url]
 
