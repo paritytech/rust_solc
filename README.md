@@ -4,8 +4,8 @@
 
 [![Build Status][travis-image]][travis-url]
 
-[travis-image]: https://travis-ci.org/snd/rust_solc.svg?branch=master
-[travis-url]: https://travis-ci.org/snd/rust_solc
+[travis-image]: https://travis-ci.org/paritytech/rust_solc.svg?branch=master
+[travis-url]: https://travis-ci.org/paritytech/rust_solc
 
 **easily compile solidity files from rust**
 
