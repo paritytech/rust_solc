@@ -11,7 +11,12 @@ error_chain! {
     }
 
     errors {
-        ExitStatusNotSuccess(command: String, exit_status: ExitStatus) {
+        ExitStatusNotSuccess(
+            command: String,
+            exit_status: ExitStatus,
+            stdout: String,
+            stderr: String
+        ) {
             description("command exit status is not success (0)"),
             display("command (`{}`) is not success (0) but `{}`", command, exit_status)
         }

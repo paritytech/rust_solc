@@ -11,7 +11,7 @@ cache: cargo
 matrix:
   include:
     # `solc` test (`solcjs` test is the next item in this list)
-    - rust: stable-2018-05-29
+    - rust: stable
       install:
         - sudo apt-get --yes install snapd
         - sudo snap install solc --stable
@@ -20,8 +20,7 @@ matrix:
         - export PATH=/snap/bin:${PATH}
         - rustup component add rustfmt-preview
       script:
-        # using --write-mode=diff instructs rustfmt to exit with an error code if the input is not formatted correctly
-        - cargo fmt --all -- --write-mode=diff
+        - cargo fmt --all -- --check
         - cd example
         - cargo build
       # after success build rust documentation and push it to gh-pages branch
@@ -31,7 +30,7 @@ matrix:
         ghp-import -n target/doc && \
         git push -qf https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
     # `solcjs` test
-    - rust: stable-2018-05-29
+    - rust: stable
       install:
         - sudo apt-get --yes install snapd
         - sudo snap install node --classic --channel=9/stable

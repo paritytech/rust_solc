@@ -51,10 +51,7 @@ fn common_version(command_name: &str) -> error::Result<String> {
         .output()
         .chain_err(|| format!("failed to run `{} --version`", command_name))?;
     if !command_output.status.success() {
-        return Err(error::ErrorKind::ExitStatusNotSuccess(
-            command_name.to_owned(),
-            command_output.status,
-        ).into());
+        return Err(exit_status(command_name, command_output).into());
     }
     let stdout = String::from_utf8(command_output.stdout)
         .chain_err(|| format!("output from `{} --version` is not utf8", command_name))?;
@@ -110,9 +107,7 @@ pub fn solc_compile<A: AsRef<Path>, B: AsRef<Path>>(
         .chain_err(|| "failed to run process `solc`")?;
 
     if !command_output.status.success() {
-        return Err(
-            error::ErrorKind::ExitStatusNotSuccess("solc".into(), command_output.status).into(),
-        );
+        return Err(exit_status("solc", command_output).into());
     }
 
     Ok(command_output)
@@ -138,9 +133,7 @@ pub fn solcjs_compile<A: AsRef<Path>, B: AsRef<Path>>(
         .chain_err(|| "failed to run process `solcjs`")?;
 
     if !command_output.status.success() {
-        return Err(
-            error::ErrorKind::ExitStatusNotSuccess("solcjs".into(), command_output.status).into(),
-        );
+        return Err(exit_status("solcjs", command_output).into());
     }
 
     Ok(command_output)
@@ -265,9 +258,7 @@ fn common_standard_json(command_name: &str, input_json: &str) -> error::Result<S
     })?;
 
     if !output.status.success() {
-        return Err(
-            error::ErrorKind::ExitStatusNotSuccess(full_command.clone(), output.status).into(),
-        );
+        return Err(exit_status(full_command, output).into());
     }
 
     let output_json = String::from_utf8(output.stdout).chain_err(|| {
@@ -278,4 +269,14 @@ fn common_standard_json(command_name: &str, input_json: &str) -> error::Result<S
     })?;
 
     Ok(output_json)
+}
+
+fn exit_status<T: Into<String>>(command: T, output: Output) -> error::ErrorKind {
+    let to_str = |d: Vec<u8>| String::from_utf8(d).unwrap_or_else(|_| "<non-utf8 output>".into());
+    error::ErrorKind::ExitStatusNotSuccess(
+        command.into(),
+        output.status,
+        to_str(output.stdout),
+        to_str(output.stderr),
+    )
 }
